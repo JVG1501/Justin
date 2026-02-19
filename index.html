@@ -80,15 +80,16 @@
 </div>
 
 <script>
-  // Pre-create the audio so it's allowed after a click
-  const audio = new Audio("https://www.soundjay.com/button/beep-09.mp3");
-  audio.volume = 1.0;
+
+  // Embedded WAV beep sound (base64 encoded, guaranteed to work)
+  const beep = new Audio("data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQwAAAAA/////wD///8A////AP///wD///8A////AP///wD///8A");
 
   document.getElementById("btn").onclick = () => {
-    // Unlock audio on user click
-    audio.play().catch(() => {});
-    audio.pause();
-    audio.currentTime = 0;
+
+    // Unlock audio (required for Chrome)
+    beep.play().catch(()=>{});
+    beep.pause();
+    beep.currentTime = 0;
 
     document.getElementById("btn").style.display = "none";
 
@@ -112,9 +113,9 @@
         clearInterval(loader);
         status.textContent = "Done";
 
-        // Guaranteed to play now (user interacted)
-        audio.currentTime = 0;
-        audio.play();
+        // Guaranteed playback
+        beep.currentTime = 0;
+        beep.play();
       }
     }, 450);
   };
