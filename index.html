@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Volume Test</title>
+  <title>Loading…</title>
   <style>
     body {
-      background: black;
+      background: #0d0d0d;
       color: white;
       font-family: Arial, sans-serif;
       display: flex;
@@ -14,46 +14,79 @@
       height: 100vh;
       text-align: center;
     }
-    button {
-      font-size: 24px;
-      padding: 20px 40px;
-      border: none;
-      border-radius: 10px;
-      background: red;
-      color: white;
+
+    .box {
+      width: 80%;
+      max-width: 300px;
     }
-    #count {
-      font-size: 48px;
+
+    .bar {
+      width: 100%;
+      height: 20px;
+      background: #333;
+      border-radius: 10px;
+      overflow: hidden;
       margin-top: 20px;
+    }
+
+    .fill {
+      height: 100%;
+      width: 0%;
+      background: #00ff99;
+      transition: width 0.3s;
+    }
+
+    button {
+      margin-top: 25px;
+      padding: 15px 30px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      background: #00ff99;
+      color: black;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
-<div>
-  <h1>Turn your volume up 🔊</h1>
-  <button onclick="start()">Start</button>
-  <div id="count"></div>
+<div class="box">
+  <h2 id="text">Click to verify</h2>
+  <button onclick="start()">Verify</button>
+
+  <div class="bar">
+    <div class="fill" id="fill"></div>
+  </div>
 </div>
 
 <script>
-  function start() {
-    let c = 3;
-    const el = document.getElementById("count");
-    el.textContent = c;
+  let audio;
 
-    const t = setInterval(() => {
-      c--;
-      if (c > 0) {
-        el.textContent = c;
-      } else {
-        clearInterval(t);
-        el.textContent = "🔊";
-        const audio = new Audio("https://cdn.pixabay.com/download/audio/2021/08/04/audio_9d8cd71fc2.mp3");
-        audio.volume = 1.0;
-        audio.play();
+  function start() {
+    // preload audio AFTER tap (required)
+    audio = new Audio("https://cdn.pixabay.com/download/audio/2021/08/04/audio_9d8cd71fc2.mp3");
+    audio.volume = 1.0;
+
+    document.querySelector("button").style.display = "none";
+    document.getElementById("text").textContent = "Loading…";
+
+    let progress = 0;
+    const fill = document.getElementById("fill");
+
+    const loader = setInterval(() => {
+      progress += Math.floor(Math.random() * 12) + 5;
+      if (progress >= 100) {
+        progress = 100;
+        clearInterval(loader);
+        setTimeout(playSound, 400);
       }
-    }, 1000);
+      fill.style.width = progress + "%";
+    }, 400);
+  }
+
+  function playSound() {
+    document.getElementById("text").textContent = "✔ Complete";
+    audio.play();
   }
 </script>
 
