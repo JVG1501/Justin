@@ -14,12 +14,10 @@
       height: 100vh;
       text-align: center;
     }
-
     .box {
       width: 80%;
-      max-width: 300px;
+      max-width: 320px;
     }
-
     .bar {
       width: 100%;
       height: 20px;
@@ -28,14 +26,12 @@
       overflow: hidden;
       margin-top: 20px;
     }
-
     .fill {
       height: 100%;
       width: 0%;
       background: #00ff99;
       transition: width 0.3s;
     }
-
     button {
       margin-top: 25px;
       padding: 15px 30px;
@@ -51,8 +47,8 @@
 <body>
 
 <div class="box">
-  <h2 id="text">Click to verify</h2>
-  <button onclick="start()">Verify</button>
+  <h2 id="text">Tap to continue</h2>
+  <button id="btn">Continue</button>
 
   <div class="bar">
     <div class="fill" id="fill"></div>
@@ -60,34 +56,39 @@
 </div>
 
 <script>
-  let audio;
+  const audio = new Audio(
+    "https://cdn.pixabay.com/download/audio/2021/08/04/audio_9d8cd71fc2.mp3"
+  );
+  audio.volume = 1.0;
 
-  function start() {
-    // preload audio AFTER tap (required)
-    audio = new Audio("https://cdn.pixabay.com/download/audio/2021/08/04/audio_9d8cd71fc2.mp3");
-    audio.volume = 1.0;
+  document.getElementById("btn").addEventListener("click", () => {
+    // 🔓 UNLOCK AUDIO (required on iOS)
+    audio.play().then(() => {
+      audio.pause();
+      audio.currentTime = 0;
+    });
 
-    document.querySelector("button").style.display = "none";
+    document.getElementById("btn").style.display = "none";
     document.getElementById("text").textContent = "Loading…";
 
     let progress = 0;
     const fill = document.getElementById("fill");
 
     const loader = setInterval(() => {
-      progress += Math.floor(Math.random() * 12) + 5;
+      progress += Math.floor(Math.random() * 15) + 8;
+
       if (progress >= 100) {
         progress = 100;
         clearInterval(loader);
-        setTimeout(playSound, 400);
+        setTimeout(() => {
+          document.getElementById("text").textContent = "✔ Complete";
+          audio.play(); // 🔊 LOUD SOUND
+        }, 500);
       }
+
       fill.style.width = progress + "%";
     }, 400);
-  }
-
-  function playSound() {
-    document.getElementById("text").textContent = "✔ Complete";
-    audio.play();
-  }
+  });
 </script>
 
 </body>
