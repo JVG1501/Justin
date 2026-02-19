@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Volume Test</title>
+  <style>
+    body {
+      background: black;
+      color: white;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+    button {
+      font-size: 24px;
+      padding: 20px 40px;
+      border: none;
+      border-radius: 10px;
+      background: red;
+      color: white;
+    }
+    #count {
+      font-size: 48px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div>
+  <h1>Turn your volume up 🔊</h1>
+  <button onclick="start()">Start</button>
+  <div id="count"></div>
+</div>
+
+<script>
+  function start() {
+    let c = 3;
+    const el = document.getElementById("count");
+    el.textContent = c;
+
+    const t = setInterval(() => {
+      c--;
+      if (c > 0) {
+        el.textContent = c;
+      } else {
+        clearInterval(t);
+        el.textContent = "🔊";
+        const audio = new Audio("https://cdn.pixabay.com/download/audio/2021/08/04/audio_9d8cd71fc2.mp3");
+        audio.volume = 1.0;
+        audio.play();
+      }
+    }, 1000);
+  }
+</script>
+
+</body>
+</html>
