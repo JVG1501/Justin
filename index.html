@@ -80,7 +80,16 @@
 </div>
 
 <script>
+  // Pre-create the audio so it's allowed after a click
+  const audio = new Audio("https://www.soundjay.com/button/beep-09.mp3");
+  audio.volume = 1.0;
+
   document.getElementById("btn").onclick = () => {
+    // Unlock audio on user click
+    audio.play().catch(() => {});
+    audio.pause();
+    audio.currentTime = 0;
+
     document.getElementById("btn").style.display = "none";
 
     const fill = document.getElementById("fill");
@@ -103,10 +112,8 @@
         clearInterval(loader);
         status.textContent = "Done";
 
-        // 🔊 SOUND (HP / Chrome SAFE)
-        const audio = document.createElement("audio");
-        audio.src = "https://www.soundjay.com/buttons/sounds/beep-07.mp3";
-        audio.volume = 1.0;
+        // Guaranteed to play now (user interacted)
+        audio.currentTime = 0;
         audio.play();
       }
     }, 450);
